@@ -1,19 +1,40 @@
 ﻿using AdventOfCode.Win32;
+using System.Runtime.InteropServices;
 using static AdventOfCode.Win32.CREATION_DISPOSITION;
 using static AdventOfCode.Win32.FILE_ATTRIBUTE;
 using static AdventOfCode.Win32.GENERIC_RIGHTS;
-using static AdventOfCode.Win32.Kernel32;
 
 namespace AdventOfCode;
 
 internal unsafe struct Win32FileSystem
 {
-    public static HANDLE Open(ReadOnlySpan<char> path, bool writeAccess = false)
+    private static delegate*<byte*, uint, uint, SECURITY_ATTRIBUTES*, uint, uint, HANDLE, HANDLE> _createFileA;
+    private static delegate*<HANDLE, void*, uint, uint*, OVERLAPPED*, int> _readFile;
+    private static delegate*<HANDLE, void*, uint, uint*, OVERLAPPED*, int> _writeFile;
+    private static delegate*<HANDLE, LARGE_INTEGER*, int> _getFileSize;
+    private static delegate*<HANDLE, int> _closeHandle;
+
+    public static bool Init()
     {
-        fixed (char* pPath = path)
+        var lib = NativeLibrary.Load("kernel32");
+        if (lib == 0)
+        {
+            return false;
+        }
+        _createFileA = (delegate*<byte*, uint, uint, SECURITY_ATTRIBUTES*, uint, uint, HANDLE, HANDLE>)NativeLibrary.GetExport(lib, "CreateFileA");
+        _readFile = (delegate*<HANDLE, void*, uint, uint*, OVERLAPPED*, int>)NativeLibrary.GetExport(lib, "ReadFile");
+        _writeFile = (delegate*<HANDLE, void*, uint, uint*, OVERLAPPED*, int>)NativeLibrary.GetExport(lib, "WriteFile");
+        _getFileSize = (delegate*<HANDLE, LARGE_INTEGER*, int>)NativeLibrary.GetExport(lib, "GetFileSizeEx");
+        _closeHandle = (delegate*<HANDLE, int>)NativeLibrary.GetExport(lib, "CloseHandle");
+        return true;
+    }
+
+    public static HANDLE Open(ReadOnlySpan<byte> path, bool writeAccess = false)
+    {
+        fixed (byte* pPath = path)
         {
             var access = writeAccess ? GENERIC_WRITE : GENERIC_READ;
-            var handle = CreateFileW(pPath, (uint)access, 0, null, (uint)OPEN_EXISTING, (uint)FILE_ATTRIBUTE_NORMAL, default);
+            var handle = _createFileA(pPath, (uint)access, 0, null, (uint)OPEN_EXISTING, (uint)FILE_ATTRIBUTE_NORMAL, default);
 
             if (handle.IsValid())
             {
@@ -28,7 +49,7 @@ internal unsafe struct Win32FileSystem
         fixed (byte* pBuffer = buffer)
         {
             uint bytesRead = 0;
-            if (ReadFile(handle, pBuffer, (uint)buffer.Length, &bytesRead, null))
+            if (_readFile(handle, pBuffer, (uint)buffer.Length, &bytesRead, null) != 0)
             {
                 return (int)bytesRead;
             }
@@ -41,7 +62,7 @@ internal unsafe struct Win32FileSystem
         fixed (byte* pBuffer = buffer)
         {
             uint bytesWritten = 0;
-            if (WriteFile(handle, pBuffer, (uint)buffer.Length, &bytesWritten, null))
+            if (_writeFile(handle, pBuffer, (uint)buffer.Length, &bytesWritten, null) != 0)
             {
                 return (int)bytesWritten;
             }
@@ -53,12 +74,13 @@ internal unsafe struct Win32FileSystem
     public static long GetFileSize(HANDLE handle)
     {
         LARGE_INTEGER value;
-        if (GetFileSizeEx(handle, &value))
+        
+        if (_getFileSize(handle, &value) != 0)
         {
             return (long)value.QuadPart;
         }
         return -1;
     }
-    public static void Close(HANDLE handle) => CloseHandle(handle);
+    public static void Close(HANDLE handle) => _closeHandle(handle);
 }
 

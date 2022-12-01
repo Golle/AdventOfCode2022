@@ -13,21 +13,18 @@ internal readonly struct Win32Console : IDisposable
 
     public static Win32Console Create()
     {
-        var handle = Win32FileSystem.Open("CON", true);
+        var handle = Win32FileSystem.Open("CON"u8, true);
         if (!handle.IsValid())
         {
             return default;
         }
-
         return new Win32Console(handle);
     }
 
-    public void Write(in ReadOnlySpan<byte> message)
+    public void Write(ReadOnlySpan<byte> message)
     {
-        //Debug.Assert(_handle.IsValid());
-        var bytesWritten = Win32FileSystem.Write(_handle, message);
-        //Debug.Assert(bytesWritten == message.Length);
+        Win32FileSystem.Write(_handle, message);
     }
 
-    public void Dispose() => Kernel32.CloseHandle(_handle);
+    public void Dispose() => Win32FileSystem.Close(_handle);
 }
