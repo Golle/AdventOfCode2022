@@ -29,6 +29,16 @@ internal static unsafe class Kernel32
 
     [DllImport(DllName, SetLastError = true, CallingConvention = CallingConvention.StdCall)]
     [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool WriteFile(
+        HANDLE hFile,
+        void* lpBuffer,
+        uint nNumberOfBytesToWrite,
+        uint* lpNumberOfBytesWritten,
+        OVERLAPPED* lpOverlapped
+    );
+
+    [DllImport(DllName, SetLastError = true, CallingConvention = CallingConvention.StdCall)]
+    [return: MarshalAs(UnmanagedType.Bool)]
     public static extern bool GetFileSizeEx(
         HANDLE hFile,
         LARGE_INTEGER* lpFileSize

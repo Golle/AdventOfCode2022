@@ -8,11 +8,12 @@ namespace AdventOfCode;
 
 internal unsafe struct Win32FileSystem
 {
-    public static HANDLE Open(ReadOnlySpan<char> path)
+    public static HANDLE Open(ReadOnlySpan<char> path, bool writeAccess = false)
     {
         fixed (char* pPath = path)
         {
-            var handle = CreateFileW(pPath, (uint)GENERIC_READ, 0, null, (uint)OPEN_EXISTING, (uint)FILE_ATTRIBUTE_NORMAL, default);
+            var access = writeAccess ? GENERIC_WRITE : GENERIC_READ;
+            var handle = CreateFileW(pPath, (uint)access, 0, null, (uint)OPEN_EXISTING, (uint)FILE_ATTRIBUTE_NORMAL, default);
 
             if (handle.IsValid())
             {
@@ -31,6 +32,20 @@ internal unsafe struct Win32FileSystem
             {
                 return (int)bytesRead;
             }
+            return -1;
+        }
+    }
+
+    public static int Write(HANDLE handle, ReadOnlySpan<byte> buffer)
+    {
+        fixed (byte* pBuffer = buffer)
+        {
+            uint bytesWritten = 0;
+            if (WriteFile(handle, pBuffer, (uint)buffer.Length, &bytesWritten, null))
+            {
+                return (int)bytesWritten;
+            }
+
             return -1;
         }
     }
