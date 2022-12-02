@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Text;
 using AdventOfCode;
+using AdventOfCode.Problems;
 
 // THis will do a lot of allocations, change when there's time.
 var problemPaths = Enumerable
@@ -13,8 +14,9 @@ if (!Win32FileSystem.Init())
     return -1;
 }
 
-Run<Problem1>(problemPaths);
-Run<Problem2>(problemPaths);
+Run<Problem1Part1>(problemPaths);
+Run<Problem1Part2>(problemPaths);
+Run<Problem2Part1>(problemPaths);
 
 return 0;
 

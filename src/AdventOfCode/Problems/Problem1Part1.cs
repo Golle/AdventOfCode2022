@@ -1,21 +1,6 @@
-﻿namespace AdventOfCode;
+﻿namespace AdventOfCode.Problems;
 
-internal class Problem2 : IProblem
-{
-    public static int Id => 2;
-
-    public static int Solve(ReadOnlySpan<byte> input)
-    {
-        return -3;
-    }
-
-    public static int SolveNaive(ReadOnlySpan<string> input)
-    {
-        return -1;
-    }
-}
-
-internal class Problem1 : IProblem
+internal class Problem1Part1 : IProblem
 {
     public static int Id => 1;
 
