@@ -1,11 +1,10 @@
-﻿#nullable disable
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using System.Text;
 using AdventOfCode;
 
 // THis will do a lot of allocations, change when there's time.
 var problemPaths = Enumerable
-    .Range(0, 100).Select(r => Encoding.UTF8.GetBytes(Path.GetFullPath($"../../../../../inputs/problem_{r}.txt")))
+    .Range(0, 100).Select(r => Encoding.UTF8.GetBytes(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, $"../../../../../inputs/problem_{r}.txt"))))
     .ToArray();
 
 
