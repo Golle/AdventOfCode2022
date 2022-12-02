@@ -17,6 +17,7 @@ if (!Win32FileSystem.Init())
 Run<Problem1Part1>(problemPaths);
 Run<Problem1Part2>(problemPaths);
 Run<Problem2Part1>(problemPaths);
+Run<Problem2Part2>(problemPaths);
 
 return 0;
 
