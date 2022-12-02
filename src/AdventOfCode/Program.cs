@@ -29,7 +29,7 @@ static void Run<T>(byte[][] paths) where T : IProblem
     var allocationsAfter = GC.GetTotalAllocatedBytes(true);
 
     var resultNaive = SolveProblemNaive<T>(paths);
-    Console.WriteLine($"Problem {T.Id} result: {result}. (NaiveResult: {resultNaive})");
+    Console.WriteLine($"Problem {T.Id} Part: {T.Part} Result: {result} (Naive Result: {resultNaive})");
     if (allocationsAfter != allocationsBefore)
     {
         Console.WriteLine($"Allocation check for problem {T.Id} failed. (Before: {allocationsBefore} After: {allocationsAfter})");

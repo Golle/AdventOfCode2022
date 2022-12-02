@@ -10,9 +10,10 @@ file enum PlayerChoice
     Paper = 2,
     Scissor = 3
 }
-internal class Problem2Part1 : IProblem
+internal struct Problem2Part1 : IProblem
 {
     public static int Id => 2;
+    public static int Part => 1;
 
     public static int Solve(ReadOnlySpan<byte> input)
     {

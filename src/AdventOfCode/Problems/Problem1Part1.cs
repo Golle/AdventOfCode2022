@@ -2,9 +2,10 @@
 
 namespace AdventOfCode.Problems;
 
-internal class Problem1Part1 : IProblem
+internal struct Problem1Part1 : IProblem
 {
     public static int Id => 1;
+    public static int Part => 1;
 
     public static int Solve(ReadOnlySpan<byte> input)
     {
@@ -12,7 +13,7 @@ internal class Problem1Part1 : IProblem
         var maxCalories = 0;
         var calories = 0;
         var token = cursor.ReadNextToken(true);
-        while (token.Type != TokenType.Invalid)
+        while (token.IsValid)
         {
             if (token.Type == TokenType.Integer)
             {

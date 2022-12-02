@@ -5,6 +5,8 @@ internal ref struct Token
     public TokenType Type;
     public ReadOnlySpan<byte> Data;
     public static Token Invalid => new() { Type = TokenType.Invalid };
+    public bool IsValid => Type != TokenType.Invalid;
+
     public int AsInteger()
     {
         var value = 0;
