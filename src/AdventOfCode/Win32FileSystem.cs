@@ -1,5 +1,6 @@
 ﻿using AdventOfCode.Win32;
 using System.Runtime.InteropServices;
+using System.Text;
 using static AdventOfCode.Win32.CREATION_DISPOSITION;
 using static AdventOfCode.Win32.FILE_ATTRIBUTE;
 using static AdventOfCode.Win32.GENERIC_RIGHTS;
