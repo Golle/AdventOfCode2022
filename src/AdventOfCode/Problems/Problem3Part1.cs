@@ -1,4 +1,6 @@
-﻿namespace AdventOfCode.Problems;
+﻿using AdventOfCode.Tokens;
+
+namespace AdventOfCode.Problems;
 
 internal struct Problem3Part1 : IProblem
 {
@@ -6,7 +8,36 @@ internal struct Problem3Part1 : IProblem
     public static int Part => 1;
     public static int Solve(ReadOnlySpan<byte> input)
     {
-        return -1;
+        var cursor = new Cursor(input);
+        var totalScore = 0;
+        do
+        {
+            var token = cursor.ReadNextToken(true);
+            var half = token.Data.Length / 2;
+            var firstCompartment = token.Data[..half];
+            var secondCompartment = token.Data[half..];
+
+            var score = 0;
+            foreach (var first in firstCompartment)
+            {
+                foreach (var second in secondCompartment)
+                {
+                    if (first == second)
+                    {
+                        score += char.IsLower((char)first) ? first - 'a' + 1 : first - 'A' + 27;
+                        break;
+                    }
+                }
+
+                if (score > 0)
+                {
+                    break;
+                }
+            }
+            totalScore += score;
+        } while (cursor.HasMore);
+
+        return totalScore;
     }
 
     public static int SolveNaive(ReadOnlySpan<string> input)

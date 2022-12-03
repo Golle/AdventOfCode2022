@@ -4,6 +4,7 @@ internal enum TokenType
 {
     Integer,
     Character,
+    String,
     NewLine,
     Invalid,
 }

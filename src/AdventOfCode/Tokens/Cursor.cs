@@ -1,4 +1,6 @@
-﻿namespace AdventOfCode.Tokens;
+﻿using System.Diagnostics;
+
+namespace AdventOfCode.Tokens;
 
 internal ref struct Cursor
 {
@@ -42,7 +44,7 @@ internal ref struct Cursor
     }
 
 
-    private bool Advance(int count = 1) 
+    private bool Advance(int count = 1)
         => (_current += count) <= _input.Length;
 
     private byte Peek(int count = 1)
@@ -74,18 +76,25 @@ internal ref struct Cursor
 
     private Token StringOrCharacterLiteral()
     {
-        if ((char)Peek() is ' ' or '\n' or '\r' or '\t')
+        static bool IsCharacter(char c) => c is >= 'a' and <= 'z' or >= 'A' and <= 'Z';
+        var index = _current;
+        var count = 0;
+        do
         {
-            var index = _current;
-            Advance();
-            return new Token
+            if (!IsCharacter((char)Current))
             {
-                Type = TokenType.Character,
-                Data = _input.Slice(index, 1)
-            };
-        }
+                break;
+            }
 
-        throw new NotSupportedException("Non single character literals are not implemented yet.");
+            Advance();
+            count++;
+        } while (true);
+        Debug.Assert(count > 0);
+        return new Token
+        {
+            Data = _input.Slice(index, count),
+            Type = count == 1 ? TokenType.Character : TokenType.String
+        };
     }
 
     private Token NewlineLiteral()
