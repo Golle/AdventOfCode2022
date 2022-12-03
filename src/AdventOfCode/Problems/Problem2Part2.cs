@@ -1,4 +1,6 @@
-﻿namespace AdventOfCode.Problems;
+﻿using AdventOfCode.Tokens;
+
+namespace AdventOfCode.Problems;
 
 // Rock A, 2 point
 // Paper B, 1 point
@@ -20,7 +22,56 @@ internal struct Problem2Part2 : IProblem
     public static int Part => 2;
     public static int Solve(ReadOnlySpan<byte> input)
     {
-        return -3;
+        var cursor = new Cursor(input);
+
+        var myScore = 0;
+        do
+        {
+            var opponent = cursor.ReadNextToken().AsCharacter() switch
+            {
+                'A' => PlayerChoice.Rock,
+                'B' => PlayerChoice.Paper,
+                'C' => PlayerChoice.Scissor,
+            };
+            var me = cursor.ReadNextToken(true).AsCharacter() switch
+            {
+                'X' => opponent switch
+                {
+                    PlayerChoice.Paper => PlayerChoice.Rock,
+                    PlayerChoice.Rock => PlayerChoice.Scissor,
+                    PlayerChoice.Scissor => PlayerChoice.Paper
+                },
+                'Y' => opponent,
+                'Z' => opponent switch
+                {
+                    PlayerChoice.Paper => PlayerChoice.Scissor,
+                    PlayerChoice.Rock => PlayerChoice.Paper,
+                    PlayerChoice.Scissor => PlayerChoice.Rock
+                }
+            };
+            // Tie
+            if (opponent == me)
+            {
+                myScore += (int)me + 3;
+            }
+            // Win
+            else if (
+                (opponent is PlayerChoice.Paper && me is PlayerChoice.Scissor) ||
+                (opponent is PlayerChoice.Scissor && me is PlayerChoice.Rock) ||
+                (opponent is PlayerChoice.Rock && me is PlayerChoice.Paper)
+            )
+            {
+                myScore += (int)me + 6;
+            }
+            else
+            {
+                myScore += (int)me;
+            }
+
+
+        } while (cursor.HasMore);
+
+        return myScore;
     }
 
     public static int SolveNaive(ReadOnlySpan<string> input)

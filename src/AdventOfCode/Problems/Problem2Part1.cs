@@ -21,7 +21,7 @@ internal struct Problem2Part1 : IProblem
     {
         var cursor = new Cursor(input);
 
-        int myScore = 0;
+        var myScore = 0;
         do
         {
             var opponent = cursor.ReadNextToken().AsCharacter() switch
