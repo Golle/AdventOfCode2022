@@ -7,10 +7,11 @@ internal ref struct Cursor
     private int _current;
 
     private byte Current => _current < _input.Length ? _input[_current] : (byte)0;
+    public bool HasMore => _current < _input.Length;
     public Cursor(ReadOnlySpan<byte> input)
         => _input = input;
 
-    public Token ReadNextToken(bool ignoreNewLineAfterToken)
+    public Token ReadNextToken(bool ignoreNewLineAfterToken = false)
     {
         do
         {
@@ -28,13 +29,20 @@ internal ref struct Cursor
                 case ' ':
                     Advance();
                     break;
+                case >= 'A' and <= 'Z' or >= 'a' and <= 'z':
+                    var stringToken = StringOrCharacterLiteral();
+                    if (ignoreNewLineAfterToken)
+                    {
+                        NewlineLiteral();
+                    }
+                    return stringToken;
             }
         } while (Current != INVALID);
         return Token.Invalid;
     }
 
 
-    private bool Advance(int count = 1)
+    private bool Advance(int count = 1) 
         => (_current += count) <= _input.Length;
 
     private byte Peek(int count = 1)
@@ -64,12 +72,36 @@ internal ref struct Cursor
         };
     }
 
+    private Token StringOrCharacterLiteral()
+    {
+        if ((char)Peek() is ' ' or '\n' or '\r' or '\t')
+        {
+            var index = _current;
+            Advance();
+            return new Token
+            {
+                Type = TokenType.Character,
+                Data = _input.Slice(index, 1)
+            };
+        }
+
+        throw new NotSupportedException("Non single character literals are not implemented yet.");
+    }
+
     private Token NewlineLiteral()
     {
         if (Current == '\r')
         {
             Advance();
             if (Current == '\n')
+            {
+                Advance();
+            }
+        }
+        else if (Current == '\n')
+        {
+            Advance();
+            if (Current == '\r')
             {
                 Advance();
             }

@@ -17,4 +17,7 @@ internal ref struct Token
         }
         return value;
     }
+
+    public char AsCharacter() 
+        => (char)Data[0];
 }
