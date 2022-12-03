@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+﻿using AdventOfCode.Tokens;
 
 namespace AdventOfCode.Problems;
 
@@ -8,7 +8,32 @@ internal struct Problem3Part2 : IProblem
     public static int Part => 1;
     public static int Solve(ReadOnlySpan<byte> input)
     {
-        return -1;
+        var cursor = new Cursor(input);
+        var totalScore = 0;
+        do
+        {
+            var firstBackpack = cursor.ReadNextToken(true).Data;
+            var secondBackpack = cursor.ReadNextToken(true).Data;
+            var thirdBackpack = cursor.ReadNextToken(true).Data;
+            foreach (var first in firstBackpack)
+            {
+                foreach (var second in secondBackpack)
+                {
+                    foreach (var third in thirdBackpack)
+                    {
+                        if (first == second && first == third)
+                        {
+                            totalScore += char.IsLower((char)first) ? first - 'a' + 1 : first - 'A' + 27;
+                            goto End;
+                        }
+                    }
+                }
+            }
+            End:;
+
+        } while (cursor.HasMore);
+
+        return totalScore;
     }
 
     public static int SolveNaive(ReadOnlySpan<string> input)
