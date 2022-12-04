@@ -37,20 +37,16 @@ internal struct Problem4Part2 : IProblem
     public static int Solve(ReadOnlySpan<byte> input)
     {
         var cursor = new Cursor(input);
-        Span<Pair> pairs = stackalloc Pair[2];
         var count = 0;
         do
         {
-            foreach (ref var pair in pairs)
-            {
-                pair.Start = cursor.ReadNextToken().AsInteger();
-                var token = cursor.ReadNextToken();
-                Debug.Assert(token.Type is TokenType.Dash);
-                pair.End = cursor.ReadNextToken().AsInteger();
-                var endToken = cursor.ReadNextToken();
-                Debug.Assert(endToken.Type is TokenType.NewLine or TokenType.Comma or TokenType.Invalid);
-            }
-            if (pairs[0].Overlaps(pairs[1]))
+            var pair1 = ReadPair(ref cursor);
+            var separator = cursor.ReadNextToken();
+            Debug.Assert(separator.Type is TokenType.Comma);
+            var pair2 = ReadPair(ref cursor);
+            var end = cursor.ReadNextToken();
+            Debug.Assert(end.Type is TokenType.NewLine or TokenType.Invalid);
+            if (pair1.Overlaps(pair2))
             {
                 count++;
             }
@@ -58,6 +54,15 @@ internal struct Problem4Part2 : IProblem
         } while (cursor.HasMore);
 
         return count;
+
+        static Pair ReadPair(ref Cursor cursor)
+        {
+            var start = cursor.ReadNextToken().AsInteger();
+            var dash = cursor.ReadNextToken();
+            Debug.Assert(dash.Type == TokenType.Dash);
+            var end = cursor.ReadNextToken().AsInteger();
+            return new Pair(start, end);
+        }
     }
 
     public static int SolveNaive(ReadOnlySpan<string> input)
@@ -73,7 +78,7 @@ internal struct Problem4Part2 : IProblem
 
             if (pair1.Overlaps(pair2))
             {
-                count ++;
+                count++;
             }
         }
 
