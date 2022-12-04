@@ -1,4 +1,7 @@
-﻿namespace AdventOfCode.Problems;
+﻿using AdventOfCode.Tokens;
+using System.Diagnostics;
+
+namespace AdventOfCode.Problems;
 
 file struct Pair
 {
@@ -14,7 +17,6 @@ file struct Pair
 
     public bool Overlaps(in Pair pair)
     {
-
         if (End < pair.Start)
         {
             return false;
@@ -34,7 +36,28 @@ internal struct Problem4Part2 : IProblem
     public static int Part => 2;
     public static int Solve(ReadOnlySpan<byte> input)
     {
-        return -1;
+        var cursor = new Cursor(input);
+        Span<Pair> pairs = stackalloc Pair[2];
+        var count = 0;
+        do
+        {
+            foreach (ref var pair in pairs)
+            {
+                pair.Start = cursor.ReadNextToken().AsInteger();
+                var token = cursor.ReadNextToken();
+                Debug.Assert(token.Type is TokenType.Dash);
+                pair.End = cursor.ReadNextToken().AsInteger();
+                var endToken = cursor.ReadNextToken();
+                Debug.Assert(endToken.Type is TokenType.NewLine or TokenType.Comma or TokenType.Invalid);
+            }
+            if (pairs[0].Overlaps(pairs[1]))
+            {
+                count++;
+            }
+
+        } while (cursor.HasMore);
+
+        return count;
     }
 
     public static int SolveNaive(ReadOnlySpan<string> input)

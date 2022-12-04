@@ -1,4 +1,7 @@
-﻿namespace AdventOfCode.Problems;
+﻿using System.Diagnostics;
+using AdventOfCode.Tokens;
+
+namespace AdventOfCode.Problems;
 
 
 file struct Pair
@@ -33,7 +36,29 @@ internal struct Problem4Part1 : IProblem
     public static int Part => 1;
     public static int Solve(ReadOnlySpan<byte> input)
     {
-        return -1;
+        var cursor = new Cursor(input);
+        Span<Pair> pairs = stackalloc Pair[2];
+        var count = 0;
+        do
+        {
+            foreach (ref var pair in pairs)
+            {
+                pair.Start = cursor.ReadNextToken().AsInteger();
+                var token = cursor.ReadNextToken();
+                Debug.Assert(token.Type is TokenType.Dash);
+                pair.End = cursor.ReadNextToken().AsInteger();
+                var endToken = cursor.ReadNextToken();
+                Debug.Assert(endToken.Type is TokenType.NewLine or TokenType.Comma or TokenType.Invalid);
+            }
+
+            if (pairs[0].Contains(pairs[1]) || pairs[1].Contains(pairs[0]))
+            {
+                count++;
+            }
+
+        } while (cursor.HasMore);
+
+        return count;
     }
 
     public static int SolveNaive(ReadOnlySpan<string> input)

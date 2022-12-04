@@ -7,7 +7,6 @@ internal ref struct Cursor
     private byte INVALID = 0;
     private readonly ReadOnlySpan<byte> _input;
     private int _current;
-
     private byte Current => _current < _input.Length ? _input[_current] : (byte)0;
     public bool HasMore => _current < _input.Length;
     public Cursor(ReadOnlySpan<byte> input)
@@ -38,6 +37,12 @@ internal ref struct Cursor
                         NewlineLiteral();
                     }
                     return stringToken;
+                case '-':
+                    Advance();
+                    return new Token { Type = TokenType.Dash };
+                case ',':
+                    Advance();
+                    return new Token { Type = TokenType.Comma };
             }
         } while (Current != INVALID);
         return Token.Invalid;

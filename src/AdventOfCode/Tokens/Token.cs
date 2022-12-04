@@ -1,5 +1,8 @@
-﻿namespace AdventOfCode.Tokens;
+﻿using System.Diagnostics;
 
+namespace AdventOfCode.Tokens;
+
+[DebuggerDisplay("Type: {Type.ToString()}")]
 internal ref struct Token
 {
     public TokenType Type;
