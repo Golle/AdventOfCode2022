@@ -14,6 +14,8 @@ if (!Win32FileSystem.Init())
     return -1;
 }
 
+
+PrintHeaders();
 Run<Problem1Part1>(problemPaths);
 Run<Problem1Part2>(problemPaths);
 Run<Problem2Part1>(problemPaths);
@@ -32,12 +34,10 @@ static void Run<T>(byte[][] paths) where T : IProblem
     var result = SolveProblem<T>(paths);
     var allocationsAfter = GC.GetTotalAllocatedBytes(true);
 
+    var naiveAllocationsBefore = GC.GetTotalAllocatedBytes(true);
     var resultNaive = SolveProblemNaive<T>(paths);
-    Console.WriteLine($"Problem {T.Id} Part: {T.Part} Result: {result} (Naive Result: {resultNaive})");
-    if (allocationsAfter != allocationsBefore)
-    {
-        Console.WriteLine($"Allocation check for problem {T.Id} failed. (Before: {allocationsBefore} After: {allocationsAfter})");
-    }
+    var naiveAllocationsAfter = GC.GetTotalAllocatedBytes(true);
+    PrintResult<T>(result, allocationsAfter - allocationsBefore, resultNaive, naiveAllocationsAfter - naiveAllocationsBefore);
 }
 
 [MethodImpl(MethodImplOptions.NoInlining)]
@@ -73,3 +73,29 @@ static int SolveProblem<T>(byte[][] paths) where T : IProblem
 
 static int SolveProblemNaive<T>(byte[][] paths) where T : IProblem
     => T.SolveNaive(File.ReadAllLines(Encoding.UTF8.GetString(paths[T.Id])));
+
+
+static void PrintHeaders()
+{
+    Console.WriteLine($"{"Problem",-10}{"Result",10}{"Allocations(bytes)",25}{"Naive Result",20}{"Allocations(bytes)",25}{"Status",15}");
+    Console.WriteLine();
+}
+static void PrintResult<T>(int result, long allocations, int naiveResult, long naiveAllocations) where T : IProblem
+{
+    Console.Write($"{$"{T.Id}:{T.Part}",-10}");
+    Console.Write($"{result,10}");
+    Console.ForegroundColor = allocations != 0 ? ConsoleColor.Red : ConsoleColor.Green;
+    Console.Write($"{allocations,25}");
+    Console.ResetColor();
+    Console.Write($"{naiveResult,20}");
+    Console.ForegroundColor = naiveAllocations != 0 ? ConsoleColor.Red : ConsoleColor.Green;
+    Console.Write($"{naiveAllocations,25}");
+    Console.ResetColor();
+
+    var same = result == naiveResult;
+    var status = same ? "O" : "X";
+    Console.ForegroundColor = same ? ConsoleColor.Yellow: ConsoleColor.Red;
+    Console.Write($"{status,13}");
+    Console.ResetColor();
+    Console.WriteLine();
+}
