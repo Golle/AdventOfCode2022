@@ -7,7 +7,7 @@ internal struct Problem1Part2 : IProblem
     public static int Id => 1;
     public static int Part => 1;
 
-    public static int Solve(ReadOnlySpan<byte> input)
+    public static ProblemResult Solve(ReadOnlySpan<byte> input)
     {
         Span<int> topCalories = stackalloc int[3];
         var cursor = new Cursor(input);
@@ -51,7 +51,7 @@ internal struct Problem1Part2 : IProblem
         }
     }
 
-    public static int SolveNaive(ReadOnlySpan<string> input)
+    public static ProblemResult SolveNaive(ReadOnlySpan<string> input)
     {
         List<int> values = new();
         var calories = 0;

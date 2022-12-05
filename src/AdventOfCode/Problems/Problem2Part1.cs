@@ -17,7 +17,7 @@ internal struct Problem2Part1 : IProblem
     public static int Id => 2;
     public static int Part => 1;
 
-    public static int Solve(ReadOnlySpan<byte> input)
+    public static ProblemResult Solve(ReadOnlySpan<byte> input)
     {
         var cursor = new Cursor(input);
 
@@ -61,7 +61,7 @@ internal struct Problem2Part1 : IProblem
         return myScore;
     }
 
-    public static int SolveNaive(ReadOnlySpan<string> input)
+    public static ProblemResult SolveNaive(ReadOnlySpan<string> input)
     {
         var myScore = 0;
         

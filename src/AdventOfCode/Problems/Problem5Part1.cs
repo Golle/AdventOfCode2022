@@ -10,12 +10,12 @@ internal struct Problem5Part1 : IProblem
 {
     public static int Id => 5;
     public static int Part => 1;
-    public static int Solve(ReadOnlySpan<byte> input)
+    public static ProblemResult Solve(ReadOnlySpan<byte> input)
     {
         return -1;
     }
 
-    public static int SolveNaive(ReadOnlySpan<string> input)
+    public static ProblemResult SolveNaive(ReadOnlySpan<string> input)
     {
         List<Stack<char>> stacks = new();
         List<List<Problem5Item>> allItems = new();
@@ -63,8 +63,7 @@ internal struct Problem5Part1 : IProblem
         }
 
         var result = string.Join("", stacks.Select(s => s.Peek()));
-        Console.WriteLine("RESULT: "+result);
-        return -1;
+        return result;
     }
 
     private static bool TryReadLine(string ina, out List<Problem5Item> items)

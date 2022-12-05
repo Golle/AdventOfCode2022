@@ -43,7 +43,7 @@ static void Run<T>(byte[][] paths) where T : IProblem
 }
 
 [MethodImpl(MethodImplOptions.NoInlining)]
-static int SolveProblem<T>(byte[][] paths) where T : IProblem
+static ProblemResult SolveProblem<T>(byte[][] paths) where T : IProblem
 {
     using var console = Win32Console.Create();
     var handle = Win32FileSystem.Open(paths[T.Id]);
@@ -73,7 +73,7 @@ static int SolveProblem<T>(byte[][] paths) where T : IProblem
     }
 }
 
-static int SolveProblemNaive<T>(byte[][] paths) where T : IProblem
+static ProblemResult SolveProblemNaive<T>(byte[][] paths) where T : IProblem
     => T.SolveNaive(File.ReadAllLines(Encoding.UTF8.GetString(paths[T.Id])));
 
 
@@ -82,14 +82,14 @@ static void PrintHeaders()
     Console.WriteLine($"{"Problem",-10}{"Result",10}{"Allocations(bytes)",25}{"Naive Result",20}{"Allocations(bytes)",25}{"Status",15}");
     Console.WriteLine();
 }
-static void PrintResult<T>(int result, long allocations, int naiveResult, long naiveAllocations) where T : IProblem
+static void PrintResult<T>(ProblemResult result, long allocations, ProblemResult naiveResult, long naiveAllocations) where T : IProblem
 {
     Console.Write($"{$"{T.Id}:{T.Part}",-10}");
-    Console.Write($"{result,10}");
+    Console.Write($"{result.ToString(),10}");
     Console.ForegroundColor = allocations != 0 ? ConsoleColor.Red : ConsoleColor.Green;
     Console.Write($"{allocations,25}");
     Console.ResetColor();
-    Console.Write($"{naiveResult,20}");
+    Console.Write($"{naiveResult.ToString(),20}");
     Console.ForegroundColor = naiveAllocations != 0 ? ConsoleColor.Red : ConsoleColor.Green;
     Console.Write($"{naiveAllocations,25}");
     Console.ResetColor();

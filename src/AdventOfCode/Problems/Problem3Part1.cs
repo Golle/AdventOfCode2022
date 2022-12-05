@@ -6,7 +6,7 @@ internal struct Problem3Part1 : IProblem
 {
     public static int Id => 3;
     public static int Part => 1;
-    public static int Solve(ReadOnlySpan<byte> input)
+    public static ProblemResult Solve(ReadOnlySpan<byte> input)
     {
         var cursor = new Cursor(input);
         var totalScore = 0;
@@ -40,7 +40,7 @@ internal struct Problem3Part1 : IProblem
         return totalScore;
     }
 
-    public static int SolveNaive(ReadOnlySpan<string> input)
+    public static ProblemResult SolveNaive(ReadOnlySpan<string> input)
     {
         var totalScore = 0;
         foreach (var ina in input)

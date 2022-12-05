@@ -34,7 +34,7 @@ internal struct Problem4Part2 : IProblem
 {
     public static int Id => 4;
     public static int Part => 2;
-    public static int Solve(ReadOnlySpan<byte> input)
+    public static ProblemResult Solve(ReadOnlySpan<byte> input)
     {
         var cursor = new Cursor(input);
         var count = 0;
@@ -65,7 +65,7 @@ internal struct Problem4Part2 : IProblem
         }
     }
 
-    public static int SolveNaive(ReadOnlySpan<string> input)
+    public static ProblemResult SolveNaive(ReadOnlySpan<string> input)
     {
         var count = 0;
         foreach (var ina in input)
