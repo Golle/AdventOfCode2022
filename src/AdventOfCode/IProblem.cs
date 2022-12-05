@@ -1,9 +1,5 @@
-﻿using System.Data.SqlTypes;
-using Microsoft.VisualBasic.CompilerServices;
-
+﻿#pragma warning disable CS0660, CS0661
 namespace AdventOfCode;
-
-
 
 public unsafe struct ProblemResult
 {
