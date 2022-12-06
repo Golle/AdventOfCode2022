@@ -8,5 +8,6 @@ internal enum TokenType
     Comma,
     Dash,
     NewLine,
+    Whitespace,
     Invalid,
 }

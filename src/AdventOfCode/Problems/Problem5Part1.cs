@@ -1,4 +1,7 @@
-﻿namespace AdventOfCode.Problems;
+﻿using System.Text;
+using AdventOfCode.Tokens;
+
+namespace AdventOfCode.Problems;
 
 internal struct Problem5Item
 {
@@ -12,6 +15,16 @@ internal struct Problem5Part1 : IProblem
     public static int Part => 1;
     public static ProblemResult Solve(ReadOnlySpan<byte> input)
     {
+        var cursor = new Cursor(input);
+
+        //do
+        //{
+        //    var line = cursor.ReadLine();
+
+        //    Console.WriteLine($"LINE: {Encoding.UTF8.GetString(line)}");
+
+        //} while (cursor.HasMore);
+
         return -1;
     }
 

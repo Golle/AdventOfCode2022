@@ -12,7 +12,20 @@ internal ref struct Cursor
     public Cursor(ReadOnlySpan<byte> input)
         => _input = input;
 
-    public Token ReadNextToken(bool ignoreNewLineAfterToken = false)
+
+    public ReadOnlySpan<byte> ReadLine()
+    {
+        var index = _current;
+        var count = 0;
+        while ((char)Current is not '\n' or '\r' )
+        {
+            count++;
+            Advance();
+        }
+        NewlineLiteral();
+        return _input.Slice(index, count);
+    }
+    public Token ReadNextToken(bool ignoreNewLineAfterToken = false, bool returnWhiteSpaceAsToken = false)
     {
         do
         {
@@ -29,6 +42,13 @@ internal ref struct Cursor
                     return NewlineLiteral();
                 case ' ':
                     Advance();
+                    if (returnWhiteSpaceAsToken)
+                    {
+                        return new Token
+                        {
+                            Type = TokenType.Whitespace
+                        };
+                    }
                     break;
                 case >= 'A' and <= 'Z' or >= 'a' and <= 'z':
                     var stringToken = StringOrCharacterLiteral();

@@ -26,6 +26,8 @@ Run<Problem4Part1>(problemPaths);
 Run<Problem4Part2>(problemPaths);
 Run<Problem5Part1>(problemPaths);
 Run<Problem5Part2>(problemPaths);
+Run<Problem6Part1>(problemPaths);
+Run<Problem6Part2>(problemPaths);
 
 return 0;
 
