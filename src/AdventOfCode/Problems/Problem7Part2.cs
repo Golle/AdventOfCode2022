@@ -40,7 +40,7 @@ file class SimpleNode
     }
 }
 
-internal class Problem7Part2 : IProblem
+internal struct Problem7Part2 : IProblem
 {
     public static int Id => 7;
     public static int Part => 2;
