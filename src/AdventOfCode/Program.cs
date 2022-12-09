@@ -32,6 +32,8 @@ Run<Problem7Part1>(problemPaths);
 Run<Problem7Part2>(problemPaths);
 Run<Problem8Part1>(problemPaths);
 Run<Problem8Part2>(problemPaths);
+Run<Problem9Part1>(problemPaths);
+Run<Problem9Part2>(problemPaths);
 
 return 0;
 
@@ -85,25 +87,25 @@ static ProblemResult SolveProblemNaive<T>(byte[][] paths) where T : IProblem
 
 static void PrintHeaders()
 {
-    Console.WriteLine($"{"Problem",-10}{"Result",10}{"Allocations(bytes)",25}{"Naive Result",20}{"Allocations(bytes)",25}{"Status",15}");
-    Console.WriteLine();
+    //Console.WriteLine($"{"Problem",-10}{"Result",10}{"Allocations(bytes)",25}{"Naive Result",20}{"Allocations(bytes)",25}{"Status",15}");
+    //Console.WriteLine();
 }
 static void PrintResult<T>(ProblemResult result, long allocations, ProblemResult naiveResult, long naiveAllocations) where T : IProblem
 {
-    Console.Write($"{$"{T.Id}:{T.Part}",-10}");
-    Console.Write($"{result.ToString(),10}");
-    Console.ForegroundColor = allocations != 0 ? ConsoleColor.Red : ConsoleColor.Green;
-    Console.Write($"{allocations,25}");
-    Console.ResetColor();
-    Console.Write($"{naiveResult.ToString(),20}");
-    Console.ForegroundColor = naiveAllocations != 0 ? ConsoleColor.Red : ConsoleColor.Green;
-    Console.Write($"{naiveAllocations,25}");
-    Console.ResetColor();
+    //Console.Write($"{$"{T.Id}:{T.Part}",-10}");
+    //Console.Write($"{result.ToString(),10}");
+    //Console.ForegroundColor = allocations != 0 ? ConsoleColor.Red : ConsoleColor.Green;
+    //Console.Write($"{allocations,25}");
+    //Console.ResetColor();
+    //Console.Write($"{naiveResult.ToString(),20}");
+    //Console.ForegroundColor = naiveAllocations != 0 ? ConsoleColor.Red : ConsoleColor.Green;
+    //Console.Write($"{naiveAllocations,25}");
+    //Console.ResetColor();
 
-    var same = result == naiveResult;
-    var status = same ? "O" : "X";
-    Console.ForegroundColor = same ? ConsoleColor.Yellow: ConsoleColor.Red;
-    Console.Write($"{status,13}");
-    Console.ResetColor();
-    Console.WriteLine();
+    //var same = result == naiveResult;
+    //var status = same ? "O" : "X";
+    //Console.ForegroundColor = same ? ConsoleColor.Yellow: ConsoleColor.Red;
+    //Console.Write($"{status,13}");
+    //Console.ResetColor();
+    //Console.WriteLine();
 }
